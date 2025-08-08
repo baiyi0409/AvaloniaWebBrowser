@@ -1,0 +1,433 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="WebBrowserDemo.App"
+             xmlns:local="using:WebBrowserDemo"
+             xmlns:controls="clr-namespace:WebBrowserDemo.Controls"
+             RequestedThemeVariant="Dark">
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+   <Application.Resources>
+       <ResourceDictionary>
+            <ControlTheme x:Key="{x:Type controls:WebTabControl}" TargetType="controls:WebTabControl">
+              <Setter Property="Margin" Value="0" />
+              <Setter Property="Padding" Value="{DynamicResource TabItemMargin}" />
+              <Setter Property="Background" Value="{DynamicResource TabControlBackground}" />
+              <Setter Property="Template">
+                <ControlTemplate>
+                  <Border BorderBrush="{TemplateBinding BorderBrush}"
+                          BorderThickness="{TemplateBinding BorderThickness}"
+                          CornerRadius="{TemplateBinding CornerRadius}"
+                          Background="{TemplateBinding Background}"
+                          HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                          VerticalAlignment="{TemplateBinding VerticalAlignment}">
+                    <DockPanel>
+                      <!-- 标签页 -->
+                      <DockPanel DockPanel.Dock="{TemplateBinding TabStripPlacement}" Margin="12 12 12 0">
+                        <!-- 按钮组 -->
+                        <UserControl  Content="{TemplateBinding ButtonContent}"
+                                      DockPanel.Dock="Right"
+                                      VerticalAlignment="Center"/>
+                        
+                        <Grid DockPanel.Dock="Left"
+                              HorizontalAlignment="Left"
+                              ColumnDefinitions="*,Auto">
+                          <ScrollViewer>
+                            <ItemsPresenter Name="PART_ItemsPresenter"
+                                            ItemsPanel="{TemplateBinding ItemsPanel}" />
+                          </ScrollViewer>
+                          <Button Grid.Column="1"
+                                  Background="Transparent"
+                                  IsVisible="{TemplateBinding  ShowAddNewPage}"
+                                  Command="{TemplateBinding AddTabCommand}"
+                                  Margin="8 0">
+                              <PathIcon Data="{DynamicResource IconPlusStroked}" Width="10" Height="10" />
+                          </Button>
+                        </Grid>
+                      </DockPanel>
+                      <!-- 标签页内容 -->
+                      <ContentPresenter Name="PART_SelectedContentHost"
+                                        Margin="{TemplateBinding Padding}"
+                                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                        Content="{TemplateBinding SelectedContent}"
+                                        ContentTemplate="{TemplateBinding SelectedContentTemplate}" />
+                    </DockPanel>
+                  </Border>
+                </ControlTemplate>
+              </Setter>
+          
+              <Style Selector="^[TabStripPlacement=Left] /template/ ItemsPresenter#PART_ItemsPresenter > WrapPanel">
+                <Setter Property="Orientation" Value="Vertical" />
+              </Style>
+              <Style Selector="^[TabStripPlacement=Right] /template/ ItemsPresenter#PART_ItemsPresenter > WrapPanel">
+                <Setter Property="Orientation" Value="Vertical" />
+              </Style>
+              <Style Selector="^[TabStripPlacement=Top] /template/ ItemsPresenter#PART_ItemsPresenter">
+                <Setter Property="Margin" Value="{DynamicResource TabControlTopPlacementItemMargin}" />
+              </Style>
+            </ControlTheme>
+         
+            <ControlTheme x:Key="{x:Type controls:WebTabItem}" TargetType="controls:WebTabItem">
+                                        <Setter Property="FontSize" Value="{DynamicResource TabItemHeaderFontSize}" />
+                                        <Setter Property="FontWeight" Value="{DynamicResource TabItemHeaderThemeFontWeight}" />
+                                        <Setter Property="Background" Value="{DynamicResource TabItemHeaderBackgroundUnselected}" />
+                                        <Setter Property="Foreground" Value="{DynamicResource TabItemHeaderForegroundUnselected}" />
+                                        <Setter Property="Padding" Value="{DynamicResource TabItemHeaderMargin}" />
+                                        <!-- <Setter Property="MinHeight" Value="{DynamicResource TabItemMinHeight}" /> -->
+                                        <Setter Property="MinHeight" Value="30" />
+                                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                                        <Setter Property="HeaderTemplate">
+                                          <DataTemplate>
+                                              <TextBlock
+                                                  Text="{Binding Header,RelativeSource={RelativeSource AncestorType=controls:WebTabItem}}"
+                                                  VerticalAlignment="Center"
+                                                  FontSize="16"/>
+                                              <!-- <Grid ColumnDefinitions="*,Auto"> -->
+                                            <!--   <TextBlock -->
+                                            <!--     Text="{Binding Header,RelativeSource={RelativeSource AncestorType=controls:WebTabItem}}" -->
+                                            <!--     VerticalAlignment="Center" -->
+                                            <!--     FontSize="16"/> -->
+                                            <!--   ~1~ <Button @1@ -->
+                                            <!--   ~1~   Grid.Column="1" @1@ -->
+                                            <!--   ~1~   Command="{Binding $parent[controls:WebTabItem].CloseTabCommand}" @1@ -->
+                                            <!--   ~1~   Background="Transparent" @1@ -->
+                                            <!--   ~1~   Width="20" @1@ -->
+                                            <!--   ~1~   Height="20" @1@ -->
+                                            <!--   ~1~   Padding="0" @1@ -->
+                                            <!--   ~1~   Margin="20 0 0 0" @1@ -->
+                                            <!--   ~1~   FontSize="10" @1@ -->
+                                            <!--   ~1~   VerticalAlignment="Center" @1@ -->
+                                            <!--   ~1~   HorizontalContentAlignment="Center" @1@ -->
+                                            <!--   ~1~   VerticalContentAlignment="Center"> @1@ -->
+                                            <!--   ~1~     <PathIcon Data="{DynamicResource IconClose}" Width="6" Height="6" /> @1@ -->
+                                            <!--   ~1~ </Button> @1@ -->
+                                            <!-- </Grid> -->
+                                          </DataTemplate>
+                                        </Setter>
+                                        <Setter Property="Template">
+                                          <ControlTemplate>
+                                            <!-- Padding="{TemplateBinding Padding}" -->
+                                            <Border
+                                              Name="PART_LayoutRoot"
+                                              Background="{TemplateBinding Background}"
+                                              BorderBrush="{TemplateBinding BorderBrush}"
+                                              BorderThickness="{TemplateBinding BorderThickness}"
+                                              CornerRadius="{TemplateBinding CornerRadius}"
+                                              Padding="{TemplateBinding Padding}" >
+                                                <Grid ColumnDefinitions="*,Auto">
+                                                    <ScrollViewer MaxWidth="180">
+                                                        <ContentPresenter
+                                                            MinWidth="180"
+                                                            Name="PART_ContentPresenter"
+                                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                            Content="{TemplateBinding Header}"
+                                                            ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                                            RecognizesAccessKey="True"
+                                                        />
+                                                    </ScrollViewer>
+
+
+                                                    <Button
+                                                        Grid.Column="1"
+                                                        Command="{Binding $parent[controls:WebTabItem].CloseTabCommand}"
+                                                        Background="Transparent"
+                                                        Width="20"
+                                                        Height="20"
+                                                        Padding="0"
+                                                        Margin="10 0 0 0"
+                                                        FontSize="10"
+                                                        VerticalAlignment="Center"
+                                                        HorizontalContentAlignment="Center"
+                                                        VerticalContentAlignment="Center">
+                                                        <PathIcon Data="{DynamicResource IconClose}" Width="6" Height="6" />
+                                                    </Button>
+                                                </Grid>
+                                          </Border>
+                                        </ControlTemplate>
+                                    </Setter>
+                        
+                                    <!--  Selected state  -->
+                                    <!--  We don't use selector to PART_LayoutRoot, so developer can override selected item background with TabStripItem.Background  -->
+                                    <Style Selector="^:selected">
+                                      <Setter Property="Background" Value="{DynamicResource TabItemHeaderBackgroundSelected}" />
+                                      <Setter Property="Foreground" Value="{DynamicResource TabItemHeaderForegroundSelected}" />
+                                      <Setter Property="BorderThickness" Value="1 1 1 0" />
+                                      <Setter Property="BorderBrush" Value="#cdcdcd"></Setter>
+                                      <Setter Property="CornerRadius" Value="5 5 0 0" />
+                                    </Style>
+                                
+                                    <!--  PointerOver state  -->
+                                    <Style Selector="^:pointerover /template/ Border#PART_LayoutRoot">
+                                      <Setter Property="Background" Value="{DynamicResource TabItemHeaderBackgroundUnselectedPointerOver}" />
+                                      <Setter Property="TextElement.Foreground" Value="{DynamicResource TabItemHeaderForegroundUnselectedPointerOver}" />
+                                    </Style>
+                                
+                                    <!--  Selected PointerOver state  -->
+                                    <Style Selector="^:selected:pointerover /template/ Border#PART_LayoutRoot">
+                                      <Setter Property="Background" Value="{DynamicResource TabItemHeaderBackgroundSelectedPointerOver}" />
+                                      <Setter Property="TextElement.Foreground" Value="{DynamicResource TabItemHeaderForegroundSelectedPointerOver}" />
+                                    </Style>
+                                
+                                    <!--  Pressed state  -->
+                                    <Style Selector="^:pressed /template/ Border#PART_LayoutRoot">
+                                      <Setter Property="Background" Value="{DynamicResource TabItemHeaderBackgroundUnselectedPressed}" />
+                                      <Setter Property="TextElement.Foreground" Value="{DynamicResource TabItemHeaderForegroundUnselectedPressed}" />
+                                    </Style>
+                                
+                                    <!--  Selected Pressed state  -->
+                                    <Style Selector="^:selected:pressed /template/ Border#PART_LayoutRoot">
+                                      <Setter Property="Background" Value="{DynamicResource TabItemHeaderBackgroundSelectedPressed}" />
+                                      <Setter Property="TextElement.Foreground" Value="{DynamicResource TabItemHeaderForegroundSelectedPressed}" />
+                                    </Style>
+                                
+                                    <!--  Disabled state  -->
+                                    <Style Selector="^:disabled /template/ Border#PART_LayoutRoot">
+                                      <Setter Property="Background" Value="{DynamicResource TabItemHeaderBackgroundDisabled}" />
+                                      <Setter Property="TextElement.Foreground" Value="{DynamicResource TabItemHeaderForegroundDisabled}" />
+                                    </Style>
+                                        
+                                        
+                                        
+                                    <!--  TabStripPlacement States Group  -->
+                                    <Style Selector="^[TabStripPlacement=Left] /template/ Border#PART_SelectedPipe">
+                                      <Setter Property="Width" Value="{DynamicResource TabItemPipeThickness}" />
+                                      <Setter Property="Height" Value="{DynamicResource TabItemVerticalPipeHeight}" />
+                                      <Setter Property="Margin" Value="0,0,2,0" />
+                                      <Setter Property="HorizontalAlignment" Value="Left" />
+                                      <Setter Property="VerticalAlignment" Value="Center" />
+                                    </Style>
+                                    <Style Selector="^[TabStripPlacement=Left] /template/ ContentPresenter#PART_ContentPresenter">
+                                      <Setter Property="Margin" Value="8,0,0,0" />
+                                    </Style>
+                                
+                                    <Style Selector="^[TabStripPlacement=Top] /template/ Border#PART_SelectedPipe, ^[TabStripPlacement=Bottom] /template/ Border#PART_SelectedPipe">
+                                      <Setter Property="Height" Value="{DynamicResource TabItemPipeThickness}" />
+                                      <Setter Property="Margin" Value="0,0,0,2" />
+                                      <Setter Property="HorizontalAlignment" Value="Stretch" />
+                                      <Setter Property="VerticalAlignment" Value="Bottom" />
+                                    </Style>
+                                
+                                    <Style Selector="^[TabStripPlacement=Right] /template/ Border#PART_SelectedPipe">
+                                      <Setter Property="Width" Value="{DynamicResource TabItemPipeThickness}" />
+                                      <Setter Property="Height" Value="{DynamicResource TabItemVerticalPipeHeight}" />
+                                      <Setter Property="Margin" Value="2,0,0,0" />
+                                      <Setter Property="HorizontalAlignment" Value="Right" />
+                                      <Setter Property="VerticalAlignment" Value="Center" />
+                                    </Style>
+                                    <Style Selector="^[TabStripPlacement=Right] /template/ ContentPresenter#PART_ContentPresenter">
+                                      <Setter Property="Margin" Value="0,0,8,0" />
+                                    </Style>
+                                    <Style Selector="^[TabStripPlacement=Right]">
+                                      <Setter Property="HorizontalContentAlignment" Value="Right" />
+                                    </Style>
+                               </ControlTheme>
+         
+            <ControlTheme x:Key="ButtonToggleSwitch" TargetType="ToggleSwitch">
+                <Setter Property="Padding" Value="{DynamicResource ButtonDefaultPadding}" />
+                <Setter Property="MinHeight" Value="{DynamicResource ButtonDefaultHeight}" />
+                <Setter Property="Foreground" Value="{DynamicResource ButtonDefaultPrimaryForeground}" />
+                <Setter Property="Background" Value="{DynamicResource ButtonBorderlessBackground}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderlessBorderBrush}" />
+                <Setter Property="BorderThickness" Value="{DynamicResource ButtonBorderThickness}" />
+                <Setter Property="CornerRadius" Value="{DynamicResource ButtonCornerRadius}" />
+                <Setter Property="HorizontalAlignment" Value="Center" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="FontSize" Value="{DynamicResource ButtonDefaultFontSize}" />
+                <Setter Property="FontWeight" Value="{DynamicResource ButtonDefaultFontWeight}" />
+                <Setter Property="RenderTransform" Value="none" />
+                <Setter Property="BackgroundSizing" Value="OuterBorderEdge" />
+                <Setter Property="Cursor" Value="Hand" />
+        
+                <Setter Property="OnContent" Value="{x:Null}" />
+                <Setter Property="OffContent" Value="{x:Null}" />
+                <Setter Property="Content" Value="{x:Null}" />
+                <Setter Property="Template">
+                    <ControlTemplate TargetType="ToggleSwitch">
+                        <Border
+                            Name="Background"
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}">
+                            <Panel>
+                                <Panel Name="PART_SwitchKnob" />
+                                <Panel Name="PART_MovingKnobs" />
+                                <ContentPresenter
+                                    Name="PART_OnContentPresenter"
+                                    IsVisible="{TemplateBinding IsChecked}"
+                                    Foreground="{TemplateBinding Foreground}"
+                                    Content="{TemplateBinding OnContent}"
+                                    ContentTemplate="{TemplateBinding OnContentTemplate}" />
+                                <ContentPresenter
+                                    Name="PART_OffContentPresenter"
+                                    IsVisible="{TemplateBinding IsChecked, Converter={x:Static BoolConverters.Not}}"
+                                    Foreground="{TemplateBinding Foreground}"
+                                    Content="{TemplateBinding OffContent}"
+                                    ContentTemplate="{TemplateBinding OffContentTemplate}" />
+                                <ContentPresenter
+                                    Name="PART_ContentPresenter"
+                                    Foreground="{TemplateBinding Foreground}"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}">
+                                    <ContentPresenter.IsVisible>
+                                        <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                            <TemplateBinding Property="Content" Converter="{x:Static ObjectConverters.IsNotNull}" />
+                                            <TemplateBinding Property="OnContent" Converter="{x:Static ObjectConverters.IsNull}" />
+                                            <TemplateBinding Property="OffContent" Converter="{x:Static ObjectConverters.IsNull}" />
+                                        </MultiBinding>
+                                    </ContentPresenter.IsVisible>
+                                </ContentPresenter>
+                            </Panel>
+                        </Border>
+                    </ControlTemplate>
+                </Setter>
+
+                <Style Selector="^:pointerover">
+                    <Setter Property="BorderBrush" Value="{DynamicResource ButtonDefaultPointeroverBorderBrush}" />
+                    <Setter Property="Background" Value="{DynamicResource ButtonDefaultPointeroverBackground}" />
+                </Style>
+        
+                <Style Selector="^:pressed">
+                    <Setter Property="BorderBrush" Value="{DynamicResource ButtonDefaultPressedBorderBrush}" />
+                    <Setter Property="Background" Value="{DynamicResource ButtonDefaultPressedBackground}" />
+                </Style>
+        
+                <Style Selector="^:disabled">
+                    <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderlessBorderBrush}" />
+                    <Setter Property="Background" Value="{DynamicResource ButtonBorderlessBackground}" />
+                    <Setter Property="Foreground" Value="{DynamicResource ButtonDefaultDisabledForeground}" />
+                </Style>
+        
+                <Style Selector="^.Large">
+                    <Setter Property="MinHeight" Value="{DynamicResource ButtonLargeHeight}" />
+                    <Setter Property="Padding" Value="{DynamicResource ButtonLargePadding}" />
+                </Style>
+                <Style Selector="^.Small">
+                    <Setter Property="MinHeight" Value="{DynamicResource ButtonSmallHeight}" />
+                    <Setter Property="Padding" Value="{DynamicResource ButtonSmallPadding}" />
+                </Style>
+            </ControlTheme>
+           
+           
+           <ControlTheme x:Key="InnerPathIcon" TargetType="PathIcon">
+                <!-- <Setter Property="Width" Value="{StaticResource SemiWidthIconMedium}" /> -->
+                <!-- <Setter Property="Height" Value="{StaticResource SemiWidthIconMedium}" /> -->
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Template">
+                    <ControlTemplate TargetType="PathIcon">
+                        <Border Background="{TemplateBinding Background}">
+                            <Viewbox
+                                Width="{TemplateBinding Width}"
+                                Height="{TemplateBinding Height}">
+                                <Path
+                                    Name="PART_Path"
+                                    Width="24"
+                                    Height="24"
+                                    Data="{TemplateBinding Data}"
+                                    Fill="{TemplateBinding Foreground}" />
+                            </Viewbox>
+                        </Border>
+                    </ControlTemplate>
+                </Setter>
+                <Style Selector="^.Active /template/ Path#PART_Path">
+                    <Setter Property="Fill" Value="{TemplateBinding BorderBrush}" />
+                </Style>
+                <!-- <Style Selector="^.ExtraSmall"> -->
+                <!--     <Setter Property="Width" Value="{StaticResource SemiWidthIconExtraSmall}" /> -->
+                <!--     <Setter Property="Height" Value="{StaticResource SemiWidthIconExtraSmall}" /> -->
+                <!-- </Style> -->
+                <!-- <Style Selector="^.Small"> -->
+                <!--     <Setter Property="Width" Value="{StaticResource SemiWidthIconSmall}" /> -->
+                <!--     <Setter Property="Height" Value="{StaticResource SemiWidthIconSmall}" /> -->
+                <!-- </Style> -->
+                <!-- <Style Selector="^.Large"> -->
+                <!--     <Setter Property="Width" Value="{StaticResource SemiWidthIconLarge}" /> -->
+                <!--     <Setter Property="Height" Value="{StaticResource SemiWidthIconLarge}" /> -->
+                <!-- </Style> -->
+                <!-- <Style Selector="^.ExtraLarge"> -->
+                <!--     <Setter Property="Width" Value="{StaticResource SemiWidthIconExtraLarge}" /> -->
+                <!--     <Setter Property="Height" Value="{StaticResource SemiWidthIconExtraLarge}" /> -->
+                <!-- </Style> -->
+           </ControlTheme>
+           
+           
+           <DataTemplate x:Key="GeometryDataTemplate" DataType="Geometry">
+               <PathIcon Theme="{StaticResource InnerPathIcon}" Data="{Binding}" />
+           </DataTemplate>
+           
+           <ControlTheme x:Key="IconBorderlessToggleSwitch"
+                         BasedOn="{StaticResource ButtonToggleSwitch}"
+                         TargetType="ToggleSwitch">
+               <!-- <Setter Property="Padding" Value="{StaticResource SemiThicknessTight}" /> -->
+               <!-- <Setter Property="Width" Value="{StaticResource SemiSpacingExtraLoose}" /> -->
+               <!-- <Setter Property="Height" Value="{StaticResource SemiSpacingExtraLoose}" /> -->
+               <!-- <Setter Property="Foreground" Value="{DynamicResource SemiColorText1}" /> -->
+               <Setter Property="Foreground" Value="{DynamicResource ButtonForeground}" /> 
+               <Setter Property="OnContentTemplate">
+                   <StaticResource ResourceKey="GeometryDataTemplate" />
+               </Setter>
+               <Setter Property="OffContentTemplate">
+                   <StaticResource ResourceKey="GeometryDataTemplate" />
+               </Setter>
+               <Setter Property="ContentTemplate">
+                   <StaticResource ResourceKey="GeometryDataTemplate" />
+               </Setter>
+           </ControlTheme>
+           
+           
+           <StreamGeometry x:Key="IconMoon">
+               M12 23a11 11 0 1 0 0-22 11 11 0 0 0 0 22Zm5-8c.48 0 .94-.05 1.39-.14a7 7 0 1 1-7.78-9.72A7 7 0 0 0 17 15Z
+           </StreamGeometry>
+           <StreamGeometry x:Key="IconSun">
+               M10.5 1.5a1.5 1.5 0 0 1 3 0v1a1.5 1.5 0 0 1-3 0v-1Z,
+               M10.5 21.5a1.5 1.5 0 0 1 3 0v1a1.5 1.5 0 0 1-3 0v-1Z,
+               M24 12c0-.83-.67-1.5-1.5-1.5h-1a1.5 1.5 0 0 0 0 3h1c.83 0 1.5-.67 1.5-1.5Z,
+               M2.5 10.5a1.5 1.5 0 0 1 0 3h-1a1.5 1.5 0 0 1 0-3h1Z,
+               M20.49 3.51a1.5 1.5 0 0 0-2.13 0l-.7.71a1.5 1.5 0 1 0 2.12 2.12l.7-.7a1.5 1.5 0 0 0 0-2.13Z,
+               M4.22 17.66a1.5 1.5 0 1 1 2.12 2.12l-.7.7a1.5 1.5 0 1 1-2.13-2.12l.71-.7Z,
+               M3.51 3.51a1.5 1.5 0 0 0 0 2.13l.71.7a1.5 1.5 0 0 0 2.12-2.12l-.7-.7a1.5 1.5 0 0 0-2.13 0Z,
+               M17.66 19.78a1.5 1.5 0 1 1 2.12-2.12l.7.7a1.5 1.5 0 1 1-2.12 2.13l-.7-.71Z,
+               M12 19a7 7 0 1 0 0-14 7 7 0 0 0 0 14Z
+           </StreamGeometry>
+           <StreamGeometry x:Key="IconClose">
+               M17.66 19.78a1.5 1.5 0 0 0 2.12-2.12L14.12 12l5.66-5.66a1.5 1.5 0 0 0-2.12-2.12L12 9.88 6.34 4.22a1.5 1.5 0 1 0-2.12 2.12L9.88 12l-5.66 5.66a1.5 1.5 0 0 0 2.12 2.12L12 14.12l5.66 5.66Z
+           </StreamGeometry>
+           <StreamGeometry x:Key="IconMinus">
+               M2 12c0-.83.67-1.5 1.5-1.5h17a1.5 1.5 0 0 1 0 3h-17A1.5 1.5 0 0 1 2 12Z
+           </StreamGeometry>
+           <StreamGeometry x:Key="IconMaximize">
+               M14 3.5c0-.83.67-1.5 1.5-1.5h3A3.5 3.5 0 0 1 22 5.5v3a1.5 1.5 0 0 1-3 0v-3a.5.5 0 0 0-.5-.5h-3A1.5 1.5 0 0 1 14 3.5Zm-12 2A3.5 3.5 0 0 1 5.5 2h3a1.5 1.5 0 1 1 0 3h-3a.5.5 0 0 0-.5.5v3a1.5 1.5 0 1 1-3 0v-3ZM3.5 14c.83 0 1.5.67 1.5 1.5v3c0 .28.22.5.5.5h3a1.5 1.5 0 0 1 0 3h-3A3.5 3.5 0 0 1 2 18.5v-3c0-.83.67-1.5 1.5-1.5Zm17 0c.83 0 1.5.67 1.5 1.5v3a3.5 3.5 0 0 1-3.5 3.5h-3a1.5 1.5 0 0 1 0-3h3a.5.5 0 0 0 .5-.5v-3c0-.83.67-1.5 1.5-1.5Z
+           </StreamGeometry>
+           <StreamGeometry x:Key="IconCopy">
+               M7 4c0-1.1.9-2 2-2h11a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2h-1V8c0-2-1-3-3-3H7V4Z,
+               M5 7a2 2 0 0 0-2 2v10c0 1.1.9 2 2 2h10a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2H5Z
+           </StreamGeometry>
+           <StreamGeometry x:Key="IconCrossStroked">
+               M3.62 19.12a1.25 1.25 0 0 0 1.76 1.76l7.12-7.11 7.12 7.11a1.25 1.25 0 0 0 1.76-1.76L14.27 12l7.11-7.12a1.25 1.25 0 0 0-1.76-1.76l-7.12 7.11-7.12-7.11a1.25 1.25 0 1 0-1.76 1.76L10.73 12l-7.11 7.12Z
+           </StreamGeometry>
+           <StreamGeometry x:Key="IconIndependentCornersStroked">
+               M15 2a1 1 0 1 0 0 2h5v5a1 1 0 1 0 2 0V3a1 1 0 0 0-1-1h-6ZM9 22a1 1 0 1 0 0-2H4v-5a1 1 0 1 0-2 0v6a1 1 0 0 0 1 1h6ZM3 10a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H4v5a1 1 0 0 1-1 1Zm19 5a1 1 0 1 0-2 0v5h-5a1 1 0 1 0 0 2h6a1 1 0 0 0 1-1v-6Z
+           </StreamGeometry>
+           <StreamGeometry x:Key="IconMinusStroked">
+               M3 13a1 1 0 1 1 0-2h18a1 1 0 1 1 0 2H3Z
+           </StreamGeometry>
+           <StreamGeometry x:Key="IconModalStroked">
+               M4 3a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h16a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H4Zm0 2h16v2H4V5Zm0 4v10h16V9H4Z
+           </StreamGeometry>
+           <StreamGeometry x:Key="IconPlusStroked">
+               M12 2a1 1 0 0 0-1 1v8H3a1 1 0 1 0 0 2h8v8a1 1 0 1 0 2 0v-8h8a1 1 0 1 0 0-2h-8V3a1 1 0 0 0-1-1Z
+           </StreamGeometry>
+       </ResourceDictionary>
+   </Application.Resources>
+             
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+  
+    <Application.Styles>
+        <FluentTheme />
+    </Application.Styles>
+</Application>

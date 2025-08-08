@@ -1,0 +1,75 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:WebBrowserDemo.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:WebBrowserDemo.Controls"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="WebBrowserDemo.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="WebBrowserDemo"
+        TransparencyLevelHint="AcrylicBlur"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="-1">
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+    <Panel>
+        <ExperimentalAcrylicBorder IsHitTestVisible="False">
+            <ExperimentalAcrylicBorder.Material>
+                <ExperimentalAcrylicMaterial
+                    TintOpacity="1"
+                    MaterialOpacity="0.25" />
+            </ExperimentalAcrylicBorder.Material>
+        </ExperimentalAcrylicBorder>
+
+        <controls:WebTabControl Name="WebTabControl"
+                                Margin="0" 
+                                ShowAddNewPage="True"
+                                PointerPressed="DragWindow">
+            <controls:WebTabControl.ButtonContent>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="4" Spacing="10">
+                    <ToggleSwitch Theme="{DynamicResource IconBorderlessToggleSwitch}"
+                                  Click="ThemeButton_OnClick"
+                                  OffContent="{StaticResource IconMoon}"
+                                  OnContent="{StaticResource IconSun}"
+                                  Width="16"
+                                  Height="16"
+                                  VerticalAlignment="Center"
+                                  />
+                    <Button Background="Transparent" 
+                            Name="FullScreenButton" 
+                            VerticalAlignment="Center"
+                            Click="FullScreenButton_OnClick">
+                        <PathIcon Data="{StaticResource IconMaximize}" Width="12"  Height="12" />
+                    </Button>
+                    <Button Background="Transparent"
+                            Name="MinButton"
+                            VerticalAlignment="Center"
+                            Click="MinButton_OnClick" >
+                        <PathIcon Data="{StaticResource IconMinus}"  Width="12"  Height="12"/>
+                    </Button>
+                    <Button Background="Transparent"
+                            Name="MaxButton"
+                            VerticalAlignment="Center"
+                            Click="MaxButton_OnClick" >
+                        <PathIcon Data="{StaticResource IconCopy}" FontWeight="Light" Width="12"  Height="12"/>
+                    </Button>
+                    <Button Background="Transparent" 
+                            Name="ClosButton" 
+                            VerticalAlignment="Center"
+                            Click="ClosButton_OnClick" >
+                        <PathIcon Data="{StaticResource IconClose}"  Width="12"  Height="12"   />
+                    </Button>
+                </StackPanel>
+            </controls:WebTabControl.ButtonContent>
+            <controls:WebTabControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <controls:TabStripPanel/>
+                </ItemsPanelTemplate>
+            </controls:WebTabControl.ItemsPanel>
+        </controls:WebTabControl>
+    </Panel>
+</Window>
