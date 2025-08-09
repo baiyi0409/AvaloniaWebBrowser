@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+     <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="WebTabControl.axaml" />
+        <ResourceInclude Source="WebItem.axaml" />
+        <ResourceInclude Source="ButtonToggleSwitch.axaml" />
+        <ResourceInclude Source="InnerPathIcon.axaml" />
+        <ResourceInclude Source="IconBorderlessToggleSwitch.axaml" />
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

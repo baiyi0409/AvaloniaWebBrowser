@@ -1,0 +1,62 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:WebBrowserDemo.Controls">
+    <ControlTheme x:Key="{x:Type controls:WebTabControl}" TargetType="controls:WebTabControl">
+              <Setter Property="Margin" Value="0" />
+              <Setter Property="Padding" Value="{DynamicResource TabItemMargin}" />
+              <Setter Property="Background" Value="{DynamicResource TabControlBackground}" />
+              <Setter Property="Template">
+                <ControlTemplate>
+                  <Border BorderBrush="{TemplateBinding BorderBrush}"
+                          BorderThickness="{TemplateBinding BorderThickness}"
+                          CornerRadius="{TemplateBinding CornerRadius}"
+                          Background="{TemplateBinding Background}"
+                          HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                          VerticalAlignment="{TemplateBinding VerticalAlignment}">
+                    <DockPanel>
+                      <!-- 标签页 -->
+                      <DockPanel DockPanel.Dock="{TemplateBinding TabStripPlacement}" Margin="12 12 12 0">
+                        <!-- 按钮组 -->
+                        <UserControl  Content="{TemplateBinding ButtonContent}"
+                                      DockPanel.Dock="Right"
+                                      VerticalAlignment="Center"/>
+                        
+                        <Grid DockPanel.Dock="Left"
+                              HorizontalAlignment="Left"
+                              ColumnDefinitions="*,Auto">
+                          <ScrollViewer>
+                            <ItemsPresenter Name="PART_ItemsPresenter"
+                                            ItemsPanel="{TemplateBinding ItemsPanel}" />
+                          </ScrollViewer>
+                          <Button Grid.Column="1"
+                                  Background="Transparent"
+                                  IsVisible="{TemplateBinding  ShowAddNewPage}"
+                                  Command="{TemplateBinding AddTabCommand}"
+                                  Margin="8 0">
+                              <PathIcon Data="{DynamicResource IconPlusStroked}" Width="10" Height="10" />
+                          </Button>
+                        </Grid>
+                      </DockPanel>
+                      <!-- 标签页内容 -->
+                      <ContentPresenter Name="PART_SelectedContentHost"
+                                        Margin="{TemplateBinding Padding}"
+                                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                        Content="{TemplateBinding SelectedContent}"
+                                        ContentTemplate="{TemplateBinding SelectedContentTemplate}" />
+                    </DockPanel>
+                  </Border>
+                </ControlTemplate>
+              </Setter>
+          
+              <Style Selector="^[TabStripPlacement=Left] /template/ ItemsPresenter#PART_ItemsPresenter > WrapPanel">
+                <Setter Property="Orientation" Value="Vertical" />
+              </Style>
+              <Style Selector="^[TabStripPlacement=Right] /template/ ItemsPresenter#PART_ItemsPresenter > WrapPanel">
+                <Setter Property="Orientation" Value="Vertical" />
+              </Style>
+              <Style Selector="^[TabStripPlacement=Top] /template/ ItemsPresenter#PART_ItemsPresenter">
+                <Setter Property="Margin" Value="{DynamicResource TabControlTopPlacementItemMargin}" />
+              </Style>
+            </ControlTheme>
+</ResourceDictionary>

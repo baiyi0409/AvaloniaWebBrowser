@@ -4,6 +4,13 @@
     <option name="projectPerEditor">
       <map>
         <entry key="App.axaml" value="WebBrowserDemo.csproj" />
+        <entry key="ControlThemes/ButtonToggleSwitch.axaml" value="WebBrowserDemo.csproj" />
+        <entry key="ControlThemes/IconBorderlessToggleSwitch.axaml" value="WebBrowserDemo.csproj" />
+        <entry key="ControlThemes/InnerPathIcon.axaml" value="WebBrowserDemo.csproj" />
+        <entry key="ControlThemes/WebItem.axaml" value="WebBrowserDemo.csproj" />
+        <entry key="ControlThemes/WebTabControl.axaml" value="WebBrowserDemo.csproj" />
+        <entry key="ControlThemes/_index.axaml" value="WebBrowserDemo.csproj" />
+        <entry key="Icons/Icon.axaml" value="WebBrowserDemo.csproj" />
         <entry key="Views/MainWindow.axaml" value="WebBrowserDemo.csproj" />
       </map>
     </option>

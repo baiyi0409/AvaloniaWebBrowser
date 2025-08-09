@@ -1,0 +1,43 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ControlTheme x:Key="InnerPathIcon" TargetType="PathIcon">
+                <!-- <Setter Property="Width" Value="{StaticResource SemiWidthIconMedium}" /> -->
+                <!-- <Setter Property="Height" Value="{StaticResource SemiWidthIconMedium}" /> -->
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Template">
+                    <ControlTemplate TargetType="PathIcon">
+                        <Border Background="{TemplateBinding Background}">
+                            <Viewbox
+                                Width="{TemplateBinding Width}"
+                                Height="{TemplateBinding Height}">
+                                <Path
+                                    Name="PART_Path"
+                                    Width="24"
+                                    Height="24"
+                                    Data="{TemplateBinding Data}"
+                                    Fill="{TemplateBinding Foreground}" />
+                            </Viewbox>
+                        </Border>
+                    </ControlTemplate>
+                </Setter>
+                <Style Selector="^.Active /template/ Path#PART_Path">
+                    <Setter Property="Fill" Value="{TemplateBinding BorderBrush}" />
+                </Style>
+                <!-- <Style Selector="^.ExtraSmall"> -->
+                <!--     <Setter Property="Width" Value="{StaticResource SemiWidthIconExtraSmall}" /> -->
+                <!--     <Setter Property="Height" Value="{StaticResource SemiWidthIconExtraSmall}" /> -->
+                <!-- </Style> -->
+                <!-- <Style Selector="^.Small"> -->
+                <!--     <Setter Property="Width" Value="{StaticResource SemiWidthIconSmall}" /> -->
+                <!--     <Setter Property="Height" Value="{StaticResource SemiWidthIconSmall}" /> -->
+                <!-- </Style> -->
+                <!-- <Style Selector="^.Large"> -->
+                <!--     <Setter Property="Width" Value="{StaticResource SemiWidthIconLarge}" /> -->
+                <!--     <Setter Property="Height" Value="{StaticResource SemiWidthIconLarge}" /> -->
+                <!-- </Style> -->
+                <!-- <Style Selector="^.ExtraLarge"> -->
+                <!--     <Setter Property="Width" Value="{StaticResource SemiWidthIconExtraLarge}" /> -->
+                <!--     <Setter Property="Height" Value="{StaticResource SemiWidthIconExtraLarge}" /> -->
+                <!-- </Style> -->
+           </ControlTheme>
+</ResourceDictionary>

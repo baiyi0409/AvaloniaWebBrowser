@@ -25,6 +25,7 @@
             <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
             <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
         </PackageReference>
+        <PackageReference Include="cef.redist.osx.arm64" Version="120.1.8" />
         <PackageReference Include="CefGlue.Avalonia" Version="120.6099.211" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1"/>
     </ItemGroup>

@@ -1,6 +1,8 @@
 ﻿using Avalonia;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using WebBrowserDemo.Extensions;
 using Xilium.CefGlue;
 using Xilium.CefGlue.Common;
@@ -17,22 +19,36 @@ sealed class Program
     public static int Main(string[] args)
     {
         var cachePath = Path.Combine(Path.GetTempPath(), "CefGlue_" + Guid.NewGuid().ToString().Replace("-", null));
-            
         AppDomain.CurrentDomain.ProcessExit += delegate { Cleanup(cachePath); };
-            
+        CefSettings settings = new CefSettings();
+        settings.CachePath = cachePath;
+#if WINDOWLESS 
+
+#else
+        //IsOSREnabled = settings.WindowlessRenderingEnabled;
+        settings.WindowlessRenderingEnabled = false;
+#endif
         AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .WithInterFont()
             .LogToTrace()
             .With(new Win32PlatformOptions())
-            .AfterSetup(_ => CefRuntimeLoader.Initialize(new CefSettings() {
-                    RootCachePath = cachePath,
-#if WINDOWLESS 
-
-#else
-                    WindowlessRenderingEnabled = false
-#endif
-                },
+            .AfterSetup(_ => 
+                CefRuntimeLoader.Initialize(
+                settings,
+                flags: new Dictionary<string, string> 
+                {
+                    {"--ignore-urlfetcher-cert-requests", "1" },
+                    {"--ignore-certificate-errors", "1" },
+                    {"--disable-web-security", "1" },
+                    {"--no-sandbox","1"},
+                    {"disable-keyring-access","1" },
+                    {"disable-gpu", "1" },
+                    {"disable-gpu-compositing", "1" },
+                    {"enable-begin-frame-scheduling", "1" },
+                    {"disable-gpu-vsync", "1" },
+                    {"--disable-gpu-sandbox","1" },
+                }.ToArray(),
                 customSchemes: new[] {
                     new CustomScheme()
                     {
@@ -41,7 +57,7 @@ sealed class Program
                     }
                 }))
             .StartWithClassicDesktopLifetime(args);
-                      
+        
         return 0;
     }
 
